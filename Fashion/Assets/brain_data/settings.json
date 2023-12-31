@@ -1,0 +1,10 @@
+{
+    "architecture": "784,100,75,50,25,10",
+    "param_init": 1,
+    "learning rate": 0.1,
+    "act func": 3,
+    "out act func": 4,
+    "cost func": 0,
+    "batch size": 100,
+    "epoch": 60
+}
