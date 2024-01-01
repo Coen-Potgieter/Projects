@@ -42,4 +42,4 @@
   </li>
 </ul>
 
-*PS. Sorry for the informality of this whole business*
+*PS. Everything is very disoragnized so if you have any question you can contact me*
