@@ -38,7 +38,7 @@
     I made a start with C# but am not very good at it
   </li>
   <li>
-    Done the basics in C++
+    Done the basics in C
   </li>
 </ul>
 
