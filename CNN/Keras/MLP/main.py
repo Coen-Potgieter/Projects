@@ -74,8 +74,7 @@ def main():
     
     
     return
-    file_path = "../Assets/train.csv"
-    X_train, Y_train, X_dev, Y_dev = import_data(file_path)
+    
     
     X_train /= 255  
 
