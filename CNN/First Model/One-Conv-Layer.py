@@ -1,11 +1,10 @@
 import numpy as np
 from PIL import Image
 import pandas as pd
-import general_CNN_try1 as cnn
-import sys
+import general_CNN_fast as cnn
 import general_MLP as mlp
 import time
-
+import sys
 
 
 def time_func(function):
@@ -73,6 +72,10 @@ def show_pic(mat):
     scaled_img = img.resize((300, 300), Image.NEAREST)
     scaled_img.show()
 
+def visualize_feature_maps(X_batch, pooled_layer, example):
+    show_pic(X_batch[:,:,0,example] * 255) 
+    for depth_idx in range(pooled_layer.shape[2]):
+        show_pic(pooled_layer[:,:,depth_idx,example] * 255)
 
 def main():
 
@@ -86,24 +89,22 @@ def main():
     steps = 1000
     batch_num = 1
 
-    mlp_struct = (75, 10)
+    mlp_struct = (338, 120, 10)
 
     layer1 = cnn.ConvLayer(input_shape=(28, 28, 1),
                            kernel_size=3,
                            output_depth=2)
     
-    layer2 = cnn.ConvLayer(input_shape=(13,13,2),
-                           kernel_size=3,
-                           output_depth=3)
+    
 
-    k_list, b_list = cnn.load_params(file_path="Assets/Params/CNN")
+    # k_list, b_list = cnn.load_params(file_path="Assets/Params/CNN")
     # layer1.k, layer1.b = k_list[0], b_list[0]
-    # layer2.k, layer2.b = k_list[1], b_list[1]
+    
 
     w, b = mlp.init_params(mlp_struct, mode="X&G")
     # w,b = mlp.load_params(file_path="Assets/Params/MLP")
 
-    cnn_lr = 0.01
+    cnn_lr = 0.1
     for step in range(steps):
         batch_end = batch_size * batch_num
         if batch_end >= tot_examples:
@@ -119,79 +120,57 @@ def main():
             inp=X_train[:, batch_start:batch_end],
             target_shape=(28, 28, 1, batch_size))
 
-        # show_pic(X_batch[:,:,0,0]*255)
-        # sys.exit()
-        # X_batch: (height, width, channel, example) - normalized
-
         layer1.forward_prop(inp=X_batch)
 
         layer1.pool(pool_size=2,
                     pool_type="max")
 
-        layer2.forward_prop(inp=layer1.p)
-        layer2.pool(2,"max")
-
-        # # print(layer2.p.shape)
-        # show_pic(X_batch[:,:,0,0]*255)
-        # for depth in range(layer2.p.shape[2]):
-        #     show_pic(layer2.p[:,:,depth,0]*255)
-        # print(layer2.p[:,:,0,0])
-        # sys.exit()
-
-        # print(np.max(layer1.p[:,:,:,:]))
-        # print(np.min(layer1.p[:,:,:,:]))
-        # sys.exit()
-
-        
-        mlp_inp = layer2.p.reshape((mlp_struct[0], batch_size), order="C")
-        
-        # mlp_inp = X_batch.reshape((784, batch_size), order="C")
+    
+        mlp_inp = layer1.p.reshape((mlp_struct[0], batch_size), order="C")
 
         z, a = mlp.for_prop(inp=mlp_inp,
                             w=w,
                             b=b,
                             act_func="Leaky ReLU",
-                            out_func="Softmax")
+                            out_func="Tanh")
 
-        dw, db, flat_dp2 = mlp.back_prop(inp=mlp_inp,
+        dw, db, flat_dp1 = mlp.back_prop(inp=mlp_inp,
                                          z=z,
                                          a=a,
                                          w=w,
                                          Y=Y_batch,
                                          act_func="Leaky ReLU",
-                                         out_func="Softmax",
-                                         cost_func="CEL",
+                                         out_func="Tanh",
+                                         cost_func="MSE",
                                          dinp=True)
 
-        dp2 = cnn.buildup(flat_dp2, layer2.p.shape)
+        dp1 = cnn.buildup(flat_dp1, layer1.p.shape)
 
-        layer2.unpool_actDerivative(dp2)
-        layer2.backward_prop()
-        layer1.unpool_actDerivative(layer2.dx)
+        layer1.unpool_actDerivative(dp1)
         layer1.backward_prop()
 
-
-        layer1.dk = np.clip(layer1.dk, -1, 1)
-        layer2.dk = np.clip(layer2.dk, -1, 1)
+        layer1.dk = np.clip(layer1.dk, -0.1, 0.1)
 
         layer1.update_params(cnn_lr)
-        layer2.update_params(cnn_lr)
 
-        w, b = mlp.update_params(w, b, dw, db, 0.01)
+        w, b = mlp.update_params(w, b, dw, db, 0.1)
 
         if step % 10 == 0:
-            print(layer2.p[:,:,1,0])
+            # print(layer1.p[:,:,1,0])
             print(f"Iteration {step}")
             print(mlp.get_accuracy(a[-1], Y_batch))
 
         if np.any(np.isnan(w[-1])):
+            # incredibly crude solution, sorry
             print(mlp_inp[:,0])
             print("\n\nNaNed bro")
             w, b = mlp.init_params(mlp_struct, mode="X&G")
+            layer1.k, layer1.b = cnn.init_params((28, 28, 1),3,2)
+
 
     mlp.save_params(w, b, "Assets/Params/MLP")
-    cnn.save_params(kernels=[layer1.k, layer2.k],
-                    biases=[layer1.b, layer2.b],
+    cnn.save_params(kernels=[layer1.k],
+                    biases=[layer1.b],
                     file_path="Assets/Params/CNN")
 
 

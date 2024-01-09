@@ -7,7 +7,6 @@ import os
 from scipy.signal import correlate2d
 
 
-
 class ConvLayer:
     def __init__(self, input_shape, kernel_size, output_depth):
         self.k, self.b = init_params(input_shape=input_shape,
@@ -124,53 +123,10 @@ def init_params(input_shape: tuple, kernel_size: int, output_depth: int):
                     output_depth)
 
     # k = np.random.randn(*kernel_shape)
-    k = np.random.uniform(low=-0.4, high=0.4, size=kernel_shape)
+    k = np.random.uniform(low=-0.2, high=0.2, size=kernel_shape)
     b = np.zeros(output_shape)
 
     return k, b
-
-
-def my_convolute(arr: np.ndarray, kernel: np.ndarray, mode: str = "valid"):
-    '''
-    Performs Valid Cross Correlation for a 2D Array and a sqaure kernel
-
-    Parameters:
-    - arr (2D array): Input size, (height, width)
-    - kernel (2D array): This kernel should be sqaure, (height, width)
-    - mode (str): Specifies the type of conovltion (["valid", "full"] )
-
-    Returns:
-    - out (2D array)
-    '''
-    valid_modes = ["valid", "full"]
-    mode = mode.lower()
-    if not mode in valid_modes:
-        raise ValueError(
-            f"Invalid pool_type='{mode}', Valid modes are {valid_modes}")
-
-    kernel_size = kernel.shape[0]
-
-    inp_height = arr.shape[0]
-    inp_width = arr.shape[1]
-
-    if mode == "full":
-        num_padding = kernel_size - 1
-        new_arr = np.zeros((inp_height + 2*num_padding,
-                            inp_width + 2*num_padding))
-        new_arr[num_padding:num_padding + inp_height,
-                num_padding:num_padding + inp_width] = arr
-        arr = new_arr
-
-    out_height = arr.shape[0] - kernel_size + 1
-    out_width = arr.shape[1] - kernel_size + 1
-
-    out = np.zeros((out_height, out_width))
-
-    for y in range(out_height):
-        for x in range(out_width):
-            extracted_inp = arr[y:y+kernel_size, x:x+kernel_size]
-            out[y, x] = np.sum(extracted_inp*kernel)
-    return out
 
 
 def _forward(inp, k, b):
@@ -434,8 +390,8 @@ def _backward(dz, x, k):
     for depth_idx in range(dz.shape[2]):
         for channel in range(x.shape[2]):
             dk[:, :, channel, depth_idx] = correlate2d(x[:, :, channel],
-                                                      dz[:, :, depth_idx],
-                                                      mode="valid")
+                                                       dz[:, :, depth_idx],
+                                                       mode="valid")
 
     dx = np.zeros(x.shape)
     for channel in range(x.shape[2]):
@@ -443,7 +399,7 @@ def _backward(dz, x, k):
             k180 = np.flipud(np.fliplr(k[:, :, channel, depth_idx]))
 
             dx[:, :, channel] += correlate2d(dz[:, :, depth_idx],
-                                            k180, mode="full")
+                                             k180, mode="full")
 
     return dk, db, dx
 

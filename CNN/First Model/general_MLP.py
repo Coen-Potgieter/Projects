@@ -17,6 +17,7 @@ Features:
     - Cross Entropy Loss
     - Mean Sqaured Error
 '''
+
 import numpy as np
 import os
 import sys

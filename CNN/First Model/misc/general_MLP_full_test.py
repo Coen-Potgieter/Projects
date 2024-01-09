@@ -1,7 +1,7 @@
 import numpy as np
 import os
-import scratch
 import sys
+import pandas as pd
 
 
 def init_params(architecture: tuple, mode="Uniform"):
@@ -544,7 +544,7 @@ def SGD(X, Y, w, b, batch_size, steps, lr, act_func, out_func, cost_func):
             print(f"Iteration {step}")
             print(get_accuracy(a[-1], Y_batch))
 
-    save_params(w, b, "Assets/MLP-Brain-Data")
+    save_params(w, b, "../Assets/MLP-Brain-Data")
 
 
 def get_accuracy(a, Y):
@@ -570,6 +570,36 @@ def normalize_data(*data_sets, data_min, data_max):
 
     return out
 
+def import_data(small=False, dev_perc=10):
+
+    if small:
+        data = pd.read_csv("Assets/small.csv")
+    else:
+        data = pd.read_csv("Assets/train.csv")
+    data = np.array(data)
+    m, n = data.shape
+
+    num_dev = int(m*dev_perc / 100)
+
+    # shuffle before splitting into dev and training sets
+    np.random.shuffle(data)
+
+    data_dev = data[:num_dev,].T
+    Y_dev = data_dev[0]
+    X_dev = data_dev[1:]
+    X_dev = X_dev
+
+    data_train = data[num_dev:,].T
+    Y_train = data_train[0]
+    X_train = data_train[1:]
+    X_train = X_train
+
+    return X_train, Y_train, X_dev, Y_dev
+
+    # ok so, each column is each example, that means our 28x28 pixel image will have
+    # 784 pixels in total so there are 784 rows in each of these matrices
+    # The answers, our Y, is a 1 dimensionsal array, i think its a coloumn matrix
+    # range of our X is 0 - 255
 
 def main():
 
@@ -644,7 +674,7 @@ def main():
     # test_forward_prop()
     # test_back_prop()
 
-    X_train, Y_train, X_dev, Y_dev = scratch.import_data(small=False)
+    X_train, Y_train, X_dev, Y_dev = import_data(small=False)
 
     X_train, X_dev = normalize_data(X_train, X_dev, data_min=0, data_max=255)
 
@@ -654,7 +684,7 @@ def main():
         SGD(X_train, Y_train, w, b, 100, 10_000, 0.001, "Leaky ReLU", "Softmax", "CEL")
 
     def test():
-        w, b = load_params("Assets/MLP-Brain-Data")
+        w, b = load_params("../Assets/MLP-Brain-Data")
         z, a = for_prop(X_dev, w, b, "Leaky ReLU", "Softmax")
         print(get_accuracy(a[-1], Y_dev))
 
