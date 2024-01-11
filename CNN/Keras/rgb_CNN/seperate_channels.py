@@ -48,7 +48,6 @@ def load_data(file_path: str, import_data=False):
             raise ValueError(f"File path '{file_path}' does not exist")
 
     npzfile = np.load(file_path)
-
     return npzfile["X_train"], npzfile["Y_train"], npzfile["X_dev"], npzfile["Y_dev"]
 
 
@@ -107,6 +106,16 @@ def one_hot(Y: np.ndarray, num_classes: int):
     '''
     return np.eye(num_classes)[Y]
 
+def sperate_channels(train, dev):
+
+    num_channels = dev.shape[3]
+    trains = []
+    devs = []
+    for channel in range(num_channels):
+        trains.append(train[:,:,:,channel:channel+1])
+        devs.append(dev[:,:,:,channel:channel+1])
+
+    return trains, devs
 
 def main():
 
@@ -145,31 +154,41 @@ def main():
     X_train = X_train / 255
     X_dev = X_dev / 255
 
+    X_train_channels, X_dev_channels = sperate_channels(X_train, X_dev)
     Y_hot = one_hot(Y_train.flatten(), 10)
 
-    model = keras.Sequential()
+    inputs = []
+    pooled2 = []
     for channel in range(3):
-        keras.layers.Conv2D()
-        pass
+        inputs.append(keras.layers.Input(shape=(32, 32, 1)))
+        conv = keras.layers.Conv2D(filters=3,
+                                   kernel_size=3)(inputs[channel])
+        activated = keras.layers.LeakyReLU(alpha=0.05)(conv)
+        pooled = keras.layers.MaxPool2D(pool_size=(2, 2),
+                                        strides=2)(activated)
+        conv2 = keras.layers.Conv2D(filters=3,
+                                    kernel_size=3)(pooled)
+        activated2 = keras.layers.LeakyReLU(alpha=0.05)(conv2)
 
-    feature_extractor = keras.Model(inputs=model.inputs,
-                                    outputs=[
-                                        layer.output for layer in model.layers],
-                                    )
-    features = feature_extractor(X_dev[0:1, :, :, :])
-    model.summary()
-    print(features[0].shape)
+        pooled2.append(keras.layers.MaxPool2D(pool_size=(2, 2),
+                                              strides=2)(activated2))
 
-    show_pic(X_dev[0, :, :, :] * 255)
-    show_pic(features[0][0, :, :, :] * 255)
+    stacked = keras.layers.Concatenate()(pooled2)
+    flattened = keras.layers.Flatten()(stacked)
 
-    return
+    dense1 = keras.layers.Dense(150,
+                                activation="tanh")(flattened)
 
+    output = keras.layers.Dense(10,
+                                activation="softmax")(dense1)
+    model = keras.models.Model(inputs, output)
     compile_model(model)
-    model.fit(x=X_train, y=Y_hot, batch_size=100, epochs=5)
+    model.fit(x=X_train_channels, 
+              y=Y_hot, 
+              batch_size=100, epochs=5)
 
-    file_path = "Assets/Models/sumChannels.keras"
-    save_model(model, file_path)
+    file_path = "Assets/Models/Seperate-Channels.keras"
+    save_model(file_path)
 
 
 if __name__ == "__main__":

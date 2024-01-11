@@ -79,14 +79,16 @@ def build_new_pic(pic, centers):
     old_pixels = get_pixels_RGB(pic)
     cluster_idx = euclid_dist(centers=centers,
                               pts=old_pixels)
-    new_pic = centers[cluster_idx].reshape(height, width, dims)
+
+    # crazy indexing things here
+    new_pic = centers[cluster_idx, :].reshape(height, width, dims)
     return Image.fromarray(np.uint8(new_pic))
 
 
 def main():
 
     num_k = 2
-    num_iters = 20
+    num_iters = 10
     dims = 3
 
     pic1 = "Assets/flower.jpeg"
@@ -96,7 +98,6 @@ def main():
     pic = Image.open(pic2).convert("RGB")
 
     pixel_vals = get_pixels_RGB(pic)
-
     centers = np.random.uniform(low=0, high=255, size=(num_k, dims))
 
     delta = np.ones((1))
