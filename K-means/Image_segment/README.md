@@ -1,4 +1,4 @@
-<h1>Applying k-means to Image segmentation</h1>
+<h1>Applying k-means for Image segmentation</h1>
 <hr/>
 <ul>
   <li>
