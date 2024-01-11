@@ -48,7 +48,7 @@ def main():
                         c=cols[cluster_idx])
             
     num_points = 300
-    num_k = 3
+    num_k = 5
     ms_delay = 500
 
     cols = [np.random.uniform(low=0, high=1, size=(1,3)) for _ in range(num_k)]
