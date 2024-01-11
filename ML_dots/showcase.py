@@ -1,13 +1,13 @@
-from main_code import *
+from brain import *
 
 # Change things here
 COURSE_NUM = 2
 POPULATION = 600
 MUTATION_RATE = 5
 
-STARTING_MOVES = 30
+STARTING_MOVES = 50
 MOVE_INCR = 10
-GEN_INCR = 10
+GEN_INCR = 5
 
 RANK_BASED = True
 ROULETTE_WHEEL = not RANK_BASED
