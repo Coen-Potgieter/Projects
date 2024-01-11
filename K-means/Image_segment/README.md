@@ -8,14 +8,14 @@
     Then mapping every pixel in the image to its respective cluster
   </li>
   <li>
-    Setting k=2 for example will outline the main focal objects in the image
+    Setting k=2, for example, will highlight the main focal objects in the image
   </li>
   <li>
     This can also be a form of compression i imagine, setting k=16 still gives you the idea of what the picture is
   </li>
   <li>
     For now, there is only euclidian distance as the measure for similarity which is most likely not the best idea. If we have 2 pixel values of say, (255,0,0) and (0,255,0), then they are equally distance away from (0,0,255).
-    I imagine this cuases some inconsistencies but will explore this at some point.
+    I imagine this causes some inconsistencies but will explore this at some point.
   </li>
 </ul>
 
