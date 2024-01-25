@@ -54,7 +54,7 @@ class Slider:
 
     def slide(self, mouse_pos: tuple):
         '''
-        Moves the slider according to the given mouse position
+        Moves the slider according to the given mouse position and updates self.val
 
         Parameters:
         - mouse_pos (tuple): Coordinates (x, y) of the current mouse position
@@ -99,7 +99,18 @@ class Slider:
 class Canvas:
     def __init__(self, pos, pixel_dims, canvas_dims, init_r):
         '''
+        Creates a canvas that one can sketch on
 
+        Parameters:
+        - pos (tuple): Coordinates (x, y) for the canvas placement
+        - pixel_dims (tuple): Dimensions fo the array to convert (height, width)
+        - disp_dims (tuple): Dimensions of the display (width, height)
+        - init_r (int): Integer value of the pen radius
+
+        Note:
+        - in our self.pixels np array, a value of 0 means that pixel has been altered
+            ie, sketching. And a value of 1 mens open space
+        - Canvas is white while sketchings are black
         '''
 
         self.pos = pos
@@ -111,20 +122,39 @@ class Canvas:
         self.pixels = np.ones(pixel_dims)
 
     def sketch(self, mouse_pos):
+        '''
+        Parameters:
+        - mouse_pos (tuple): Coordinates (x, y) of the current mouse position
 
+        Note:
+        - Both scale factor and canvas position changes the position of the actual
+            pixel we are trying to click, so these calculation takes all that into 
+            account
+        - This should be called with a try/except call since this can cause 
+            IndexErrors
+        '''
         y_scale = self.pixel_dims[0] / self.canvas_dims[1]
         x_scale = self.pixel_dims[1] / self.canvas_dims[0]
         x_pos = int((mouse_pos[0] - self.pos[0]) * x_scale)
         y_pos = int((mouse_pos[1] - self.pos[1]) * y_scale)
-        rows, cols = self.pixel_dims
 
         # won't even lie this np.ogrid wizardry is from ChatGPT
+        rows, cols = self.pixel_dims
         y_indices, x_indices = np.ogrid[:rows, :cols]
         mask = (y_indices - y_pos)**2 + (x_indices - x_pos)**2 <= self.r**2
         self.pixels[mask] = 0
 
     def draw(self, win):
+        '''
+        Blits our self.pixels numpy array onto our previously initialised surface
+            then blits it
 
+        Note:
+        - rgb_arr is made to fit the format that py.surfarray.blit_array() wants:
+            -> 3D array
+            -> Integer values rangeing from 0-255 
+            -> (cols, rows) 
+        '''
         rgb_arr = np.repeat(np.expand_dims(
             (self.pixels.T * 255), axis=-1), 3, axis=-1)
 
@@ -145,6 +175,8 @@ class Canvas:
 class Display:
     def __init__(self, pos, pixel_dims, disp_dims):
         '''
+        Creates a display that displays a numpy array
+
         Parameters:
         - pos (tuple): Position to place the display (x, y)
         - pixel_dims (tuple): Dimensions fo the array to convert (height, width)
@@ -156,6 +188,8 @@ class Display:
 
     def update(self, arr):
         '''
+        Assigns given `arr` to `self.pixels`
+
         Parameters:
         - arr (2D array): array to be displayed (height, width) 0-1
 
@@ -169,7 +203,8 @@ class Display:
 
     def draw(self, win):
         '''
-        blits array onto surface and blits it
+        Blits our self.pixels numpy array onto our previously initialised surface
+            then blits it
 
         Parameters:
         - win
@@ -205,14 +240,50 @@ def draw_val(win, pos, text, font, text_col, bg_RGBA):
 
 
 def run_model(model, canvas, display):
+    '''
+    Runs our input through the auto-encoder and uses the output to updates the disaply
+
+    Parameters:
+    - win
+    - canvas
+    - display
+    '''
     arr = np.expand_dims(np.expand_dims(
         canvas.get_np(), axis=0), axis=-1)
     outp = model.predict(arr, verbose=0)
     display.update(outp[0, :, :, 0])
 
 
-def main(model=None):
+def draw_screen(win, bg, display, canvas, sliders: list, text_infos: tuple):
+    '''
 
+    Parameters:
+    - win
+    - bg (tuple): RGB info of the background colour 
+    - display
+    - canvas
+    - sliders (list): each element is a slider object
+    - text_infos (tuple): each element is a tuple (text, pos, col, font)
+    '''
+    win.fill(bg)
+    display.draw(win)
+    for slider in sliders:
+        slider.draw(win)
+    canvas.draw(win)
+    for elem in text_infos:
+        text, pos, col, font = elem
+        surf = font.render(text, True, col)
+        win.blit(surf, pos)
+
+
+def main(model=None):
+    '''
+    Pygame interface for generating faces from user's skecthings
+
+    Steps for "decent" results:
+    - Start off by drawing the face shape, like a circle or oval.
+    - Then colour in kind of where the mousth should be 
+    '''
     # --------------- Pygame init things --------------- #
     py.font.init()
     fps = 60
@@ -225,14 +296,31 @@ def main(model=None):
 
     val_font = py.font.SysFont("sfcamera", 17, bold=True)
     value_text_col = (0, 0, 0)
-    value_bg_rgba = (136, 179, 200, 200)
+    value_bg_rgba = (255, 244, 224, 200)
 
-    slider_col = (255, 255, 0)
+    misc_font = py.font.SysFont("Arial", 18, bold=True)
+    misc_text_col = (255, 127, 91)
+
+    guess_text = "Toggle Guess [Space]"
+    guess_pos = (630, 490)
+    guess_text_info = (guess_text, guess_pos, misc_text_col, misc_font)
+
+    clear_text = "Clear Canvas [C]"
+    clear_pos = (200, 490)
+    clear_text_info = (clear_text, clear_pos, misc_text_col, misc_font)
+
+    radius_text = "Pen Radius"
+    radius_pos = (450, w_height-30)
+    radius_text_info = (radius_text, radius_pos, misc_text_col, misc_font)
+
+    all_text_info = (guess_text_info, clear_text_info, radius_text_info)
+
+    slider_col = (246, 177, 122)
     line_col = (255, 255, 255)
 
     # ------------------- Init Sliders & Display ------------------- #
     slider = Slider(pos=(420, 550), lo=3, hi=10, init_val=5, line_dims=(150, 4),
-                    radius=12, slider_col=slider_col, line_col=line_col,
+                    radius=10, slider_col=slider_col, line_col=line_col,
                     v_orientation=False)
 
     canvas = Canvas(pos=(70, 30), pixel_dims=(171, 186), canvas_dims=(400, 450),
@@ -260,10 +348,7 @@ def main(model=None):
 
             if slide_lock:
                 slider.slide(mouse_pos)
-                win.fill(bg)
-                slider.draw(win)
-                canvas.draw(win)
-                display.draw(win)
+                draw_screen(win, bg, display, canvas, (slider,), all_text_info)
 
                 draw_val(win=win, pos=(slider.slide_rect.x,
                                        slider.slide_rect.y),
@@ -286,10 +371,7 @@ def main(model=None):
 
         if (not mouse1) and prev_mouse:
 
-            win.fill(bg)
-            slider.draw(win)
-            canvas.draw(win)
-            display.draw(win)
+            draw_screen(win, bg, display, canvas, (slider,), all_text_info)
             py.display.update()
             canvas.change_radius(slider.val)
             slide_lock = False
@@ -311,7 +393,6 @@ def main(model=None):
                     canvas.clear()
                     canvas.draw(win)
                     py.display.update()
-    
 
 
 if __name__ == "__main__":

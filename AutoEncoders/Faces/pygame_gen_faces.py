@@ -114,6 +114,8 @@ class Slider:
 class Display:
     def __init__(self, pos, pixel_dims, disp_dims):
         '''
+        Creates a display that displays a numpy array
+
         Parameters:
         - pos (tuple): Position to place the display (x, y)
         - pixel_dims (tuple): Dimensions fo the array to convert (height, width)
@@ -125,6 +127,8 @@ class Display:
 
     def update(self, arr):
         '''
+        Assigns given `arr` to `self.pixels`
+
         Parameters:
         - arr (2D array): array to be displayed (height, width) 0-1
 
@@ -138,7 +142,8 @@ class Display:
 
     def draw(self, win):
         '''
-        blits array onto surface and blits it
+        Blits our self.pixels numpy array onto our previously initialised surface
+            then blits it
 
         Parameters:
         - win
@@ -197,7 +202,15 @@ def new_face(model, latent_vectors, display, sliders):
 
 
 def draw_screen(win, bg, display, sliders, text_info):
+    '''
 
+    Parameters:
+    - win
+    - bg (tuple): RGB info of the background colour 
+    - display
+    - sliders (list): each element is a slider object
+    - text_infos (tuple): (text, pos, col, font)
+    '''
     text, pos, col, font = text_info
     win.fill(bg)
     display.draw(win)
