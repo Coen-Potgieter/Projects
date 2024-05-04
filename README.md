@@ -2,16 +2,13 @@
 <hr/>
 <ul>
   <li>
-    Not entirely sure yet how to use GitHub
-  </li>
-  <li>
-    I have however uploaded all my favorite projects (not all) to this repository
+    I have uploaded all my favorite projects (not all) to this repository
   </li>
   <li>
     Most of it is Machine Learning things
   </li>
   <li>
-    I can imagine that most of it is fairly confusing to navigate so contact me if you want to know more I suppose
+    I imagine that most of it is fairly confusing to navigate so contact me if you want to know more I suppose
   </li>
 </ul>
 
@@ -38,8 +35,8 @@
     I made a start with C# but am not very good at it
   </li>
   <li>
-    Done the basics in C
+    Fairly proficient in C
   </li>
 </ul>
 
-*PS. Everything is very disoragnized so if you have any question you can contact me*
+*Note: Everything is very disoragnized so if you have any question you can contact me*
