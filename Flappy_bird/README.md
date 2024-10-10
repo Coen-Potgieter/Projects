@@ -24,7 +24,7 @@
 
 - Play the game yourself
     ```bash
-    python game
+    python game.py
     ```
 
 - Deactivate Virtual Environment
