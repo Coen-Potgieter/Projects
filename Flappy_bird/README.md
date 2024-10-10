@@ -31,4 +31,3 @@
     ```bash
     deactivate
     ```
-    deactivate
