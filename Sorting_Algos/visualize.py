@@ -689,10 +689,10 @@ def main():
     # recursive pairwise
     # https://www.youtube.com/watch?v=8MsTNqK3o_w&t=233s&ab_channel=Musicombo
 
-    visualize(sort_func=sort_funcs[2],
+    visualize(sort_func=sort_funcs[11],
               asc=1,
               delay=0,
-              num_elems=300,  # 1370 is max
+              num_elems=800,  # 1370 is max
               random_array=0)
 
 
