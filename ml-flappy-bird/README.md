@@ -6,23 +6,23 @@
  
 <hr>
 
-## Overview
+## Overview 📌
 
 *Working Progress*
 
 <hr>
 
 
-## Demo
+## Demo 📸
 
 <p align="center">
   <img src="Assets/demo.gif" width="500" alt="Demo">
 </p>
 
 
-## Setup 
+## Setup ⚙️
 
-- Ensure you are in the root folder: `ml-dots/`
+- Ensure you are in the root folder: `ml-flappy-bird/`
 
 ### Automated Setup
 
@@ -66,7 +66,7 @@ Alternatively, you could create & activate a virtual environment yourself (this 
 
 - Run ML flappy bird
     ```bash
-    python ml_version.py
+    python ml-version.py
     ```
 
 - Play the game yourself
