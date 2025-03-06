@@ -153,7 +153,7 @@ def main(next_flappy_w_b=None):
 
             else:
                 ys = [flappies[i].rect.y - WIDTH /
-                      2 for i in range(num_flappies)]
+                    2 for i in range(num_flappies)]
                 miny = min(ys)
 
                 return ys.index(miny)
@@ -281,6 +281,8 @@ def main(next_flappy_w_b=None):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
+                pygame.quit()
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
