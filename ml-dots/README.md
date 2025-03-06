@@ -14,7 +14,7 @@
 
 ## Demo
 
-<video src="assets/demo.mp4" width="600" autoplay loop muted></video>
+<video src="Assets/demo.mp4" width="600" autoplay loop muted></video>
 
 
 ## Setup 
