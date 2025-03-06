@@ -14,7 +14,7 @@
 
 ## Demo
 
-<video src="https://github.com/Coen-Potgieter/Projects/raw/main/ml-dots/Assets/demo.mp4" autoplay loop muted width="100%"></video>
+![Demo](Assets/demo.gif)
 
 
 ## Setup 
