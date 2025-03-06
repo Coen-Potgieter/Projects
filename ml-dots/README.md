@@ -14,7 +14,9 @@
 
 ## Demo
 
-![Demo](Assets/demo.gif)
+<p align="center">
+  <img src="Assets/demo.gif" width="500" alt="Demo">
+</p>
 
 
 ## Setup 
