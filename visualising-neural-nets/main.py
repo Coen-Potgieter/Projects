@@ -37,11 +37,11 @@ struct_choice = {
     0: [1, 10, 5, 3, 1],    # simple
     1: [1, 100, 75, 50, 25, 1]  # Complex
 }
-STRUCT = struct_choice[1]
+STRUCT = struct_choice[0]
 
 # ---------------------- Function to approximate ----------------- #
 SAMPLE_SIZE = 200
-FUNC_IDX = 10
+FUNC_IDX = 2
 # region Functions
 # funcs = [line, parabola, sin, my_random_thing, sigmoid]
 
