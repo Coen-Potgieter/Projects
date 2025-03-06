@@ -2,6 +2,7 @@ import pygame
 from misc import Vector
 import misc
 import random
+import sys
 
 
 pygame.font.init()
@@ -57,7 +58,6 @@ class Target:
 
 
 class Dot:
-
     def __init__(self, max_step, incent: list):
 
         self.goals_done = 0
@@ -263,7 +263,6 @@ def main(population: int,
                 "steps": least_steps}
 
     def parent_selection():
-
         fitness_lis = fitness_func()
         # print(max(fitness_func))
 
@@ -285,7 +284,6 @@ def main(population: int,
         return new_dot
 
     def mutate(patient, best, max_steps):
-
         next_gen_dots = new_dots(max_steps)
 
         mutation_rate = mr
@@ -353,7 +351,6 @@ def main(population: int,
     while True:
 
         drawer = dots[0]
-
         num_dead = 0
 
         WIN.fill(GREY)
@@ -370,9 +367,7 @@ def main(population: int,
         for elem in dots:
 
             elem.move()
-
             elem.draw(show_best)
-
             elem.check_collide()
 
             if drawer.goals_done < elem.goals_done:
@@ -396,8 +391,10 @@ def main(population: int,
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
-
+                sys.exit()
+                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     show_best = not show_best
@@ -411,7 +408,3 @@ def main(population: int,
 
                 if event.key == pygame.K_f:
                     show_obs = not show_obs
-
-
-if __name__ == "__main__":
-    main()

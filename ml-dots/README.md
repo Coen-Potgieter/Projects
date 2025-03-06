@@ -10,13 +10,35 @@
 - Our population is a group of dots that are initialised with random "moves" through a 2D space.
 - After each iteration, the dots that get closest to the goal is used as a parent to make babies, some being mutated in order to introduce some diversity in the search.
 
-
-
 <hr>
 
 ## Setup 
 
+
 - Ensure you are in the root folder: `ml-dots/`
+
+### Automated Setup
+
+Run the appropriate script based on your OS
+
+- **Linux/MacOS:**
+    ```bash
+    ./scripts/demo.sh
+    ```
+
+- **Windows:**
+    ```bash
+    ./scripts/demo.bat
+    ```
+This script will:
+1. Create a virtual environment
+2. Install dependencies
+3. Run `showcase.py`
+4. Finally, clean up
+
+### Manual
+
+Alternatively, you could create & activate a virtual environment yourself (this would offer more flexibility of course).
 
 - Create Virtual Environment
     ```bash
