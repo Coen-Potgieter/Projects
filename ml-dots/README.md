@@ -14,13 +14,10 @@
 
 ## Demo
 
-<!-- <p align="center"> -->
-<!--   <img src="Assets/demo.gif" width="500" alt="Demo"> -->
-<!-- </p> -->
-
 <p align="center">
-    <video src="Assets/demo.mp4" autoplay loop muted playsinline width="500"></video>
+  <img src="Assets/demo.gif" width="500" alt="Demo">
 </p>
+
 
 ## Setup 
 
