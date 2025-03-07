@@ -3,7 +3,7 @@ from brain import *
 # Change things here
 COURSE_NUM = 2
 POPULATION = 600
-MUTATION_RATE = 5
+MUTATION_RATE = 10
 
 STARTING_MOVES = 50
 MOVE_INCR = 10

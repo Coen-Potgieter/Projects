@@ -14,10 +14,11 @@
 
 ## Demo
 
-<p align="center">
-  <img src="Assets/demo.gif" width="500" alt="Demo">
-</p>
+<!-- <p align="center"> -->
+<!--   <img src="Assets/demo.gif" width="500" alt="Demo"> -->
+<!-- </p> -->
 
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/sFdIqsv"><a href="//imgur.com/sFdIqsv"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ## Setup 
 
