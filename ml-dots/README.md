@@ -18,8 +18,8 @@
 <!--   <img src="Assets/demo.gif" width="500" alt="Demo"> -->
 <!-- </p> -->
 
-![Imgur Image](http://i.imgur.com/zTONrOD.jpg)
-![Imgur Image](http://i.imgur.com/zTONrOD)
+![Imgur Image](http://i.imgur.com/Kxhbfj3.gif)
+![Imgur Image](http://i.imgur.com/Kxhbfj3)
 
 
 ## Setup 
