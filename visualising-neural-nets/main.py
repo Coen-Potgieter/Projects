@@ -31,20 +31,17 @@ LINE_COL, DOT_COL = styles[style_choice][0], styles[style_choice][1]
 BG = BLACK
 
 # ---------------------- MLP performance ----------------- #
-LR = 0.01
+LR = 0.0004
 
 struct_choice = {
     0: [1, 10, 5, 3, 1],    # simple
     1: [1, 100, 75, 50, 25, 1]  # Complex
 }
-STRUCT = struct_choice[0]
+STRUCT = struct_choice[1]
 
 # ---------------------- Function to approximate ----------------- #
 SAMPLE_SIZE = 200
-FUNC_IDX = 2
-# region Functions
-# funcs = [line, parabola, sin, my_random_thing, sigmoid]
-
+FUNC_IDX = 3
 # 0: Straight Line
 # 1: Parabola
 # 2: Sin
@@ -56,8 +53,6 @@ FUNC_IDX = 2
 # 8: sum_of_sins
 # 9: sum_of_polys
 # 10: cant exactly explain this bro
-
-# endregion
 
 # something to is that this thing is rlly, rlly good at plotting the sigmoid function,
 # even if it gets given 2 points it chooses to go through both in a sigmoid shape,
