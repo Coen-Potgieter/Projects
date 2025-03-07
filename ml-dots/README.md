@@ -18,9 +18,9 @@
 <!--   <img src="Assets/demo.gif" width="500" alt="Demo"> -->
 <!-- </p> -->
 
-![Imgur Image](http://i.imgur.com/Kxhbfj3.gif)
-![Imgur Image](http://i.imgur.com/Kxhbfj3)
-
+<p align="center">
+    <video src="Assets/demo.mp4" autoplay loop muted playsinline width="500"></video>
+</p>
 
 ## Setup 
 
