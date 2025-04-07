@@ -1,0 +1,6 @@
+env/
+*.DS_Store
+*__pycache__
+Assets/Data/Numpy/*
+!Assets/Data/Numpy/.gitkeep
+Data/Original/*

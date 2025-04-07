@@ -32,8 +32,8 @@ def load_arrays(npy_path: str):
     X_train, X_dev = np.load(
         npy_path + "/X_train.npy"), np.load(npy_path + "/X_dev.npy")
 
-    assert X_train.shape == (1_000, 171, 186, 1)
-    assert X_dev.shape == (500, 171, 186, 1)
+    assert X_train.shape == (30_000, 171, 186, 1)
+    assert X_dev.shape == (7_921, 171, 186, 1)
 
     return X_train, X_dev
 
@@ -53,7 +53,7 @@ def learn(X_train, X_dev, auto_path, init=True):
     if init:
         auto_encoder = cnn_autoEncoder.build(X_train.shape[1:])
     else:
-        auto_encoder = tf.keras.saving.load_model(auto_path)
+        auto_encoder = tf.keras.models.load_model(auto_path, compile=False)
 
     _, outp_h, outp_w, _ = auto_encoder.layers[-1].output.shape
 
@@ -65,6 +65,9 @@ def learn(X_train, X_dev, auto_path, init=True):
     auto_encoder.compile(optimizer=tf.keras.optimizers.legacy.Adam(),
                          loss=tf.keras.losses.MeanSquaredError())
 
+    print("Model output shape:", auto_encoder.output.shape)
+    print("Training target shape:", X_train[:, start_h:end_h, start_w:end_w, :].shape)
+
     auto_encoder.fit(
         x=X_train, y=X_train[:, start_h:end_h, start_w:end_w, :],
         batch_size=8,
@@ -72,7 +75,7 @@ def learn(X_train, X_dev, auto_path, init=True):
         validation_data=(X_dev, X_dev[:, start_h:end_h, start_w:end_w, :]),
     )
 
-    auto_encoder.save(auto_path)
+    auto_encoder.save(auto_path, save_format="keras")
 
 
 def test_auto(auto_path, X):
@@ -81,7 +84,7 @@ def test_auto(auto_path, X):
     - auto_path (str): file path to the autoencoder model
     - X (4D array): (Examples, height, width, channels)
     '''
-    auto_encoder = tf.keras.saving.load_model(auto_path)
+    auto_encoder = tf.keras.models.load_model(auto_path, compile=False)
     reconstruction = auto_encoder.predict(X, verbose=0)
     plot_imgs((X, reconstruction), ("Original", "Reconstruction"))
 
@@ -179,7 +182,7 @@ def latent_space_inference(path, X, num_plots=None):
     if not os.path.exists(path):
         raise ValueError(f"File path '{path}' does not exist")
 
-    auto = tf.keras.saving.load_model(path)
+    auto = tf.keras.models.load_model(path, compile=False)
     encoder = extract_encoder(auto)
     latent = encoder.predict(X, verbose=0)
 
@@ -266,7 +269,7 @@ def generate_faces(path, X):
     '''
     Runs pygame UI
     '''
-    auto = tf.keras.saving.load_model(path)
+    auto = tf.keras.models.load_model(path, compile=False)
     decoder = extract_decoder(auto)
     encoder = extract_encoder(auto)
     latent = encoder.predict(X, verbose=0)
@@ -275,20 +278,21 @@ def generate_faces(path, X):
 
 
 def draw_faces(path):
-    auto = tf.keras.saving.load_model(path)
+    auto = tf.keras.models.load_model(path, compile=False)
     pygame_draw_faces.main(auto)
     pass
 
 
 def main():
 
-    auto_path = "Assets/Models/auto.keras"
+    auto_path = "Assets/Models/auto"
     X_train, X_dev = load_arrays("Assets/Data/Numpy")
+
 
     # plot_imgs((X_train[:100],), ("faces",))
 
-    # learn(X_train[15_000:, :, :, :],
-    #       X_dev[3000:4000, :, :, :], auto_path, init=False)
+    # learn(X_train[15_000:, :, :, :], X_dev[3000:4000, :, :, :], auto_path, init=True)
+    learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
 
     # test_auto(auto_path, X_dev[50:75])
 
