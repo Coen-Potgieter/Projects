@@ -1,4 +1,6 @@
 import tensorflow as tf
+print(tf.__version__)
+print(tf.keras.__file__)
 import os
 import numpy as np
 import mlp_autoEncoder
@@ -136,7 +138,7 @@ def generate_digits(path):
     Runs pygame UI
     '''
 
-    auto = tf.keras.saving.load_model(path)
+    auto = tf.keras.models.load_model(path, compile=False)
     decoder = extract_decoder(auto)
     pygame_UI.run(decoder)
 
@@ -249,11 +251,11 @@ def learn(X_train, auto_path, init=True):
 
     auto_encoder.fit(X_train, X_train, batch_size=32, epochs=10)
 
-    auto_encoder.save(auto_path)
+    auto_encoder.save(auto_path, save_format="keras")
 
 
 def main():
-    auto_path = "Assets/Models/auto.keras"
+    auto_path = "Assets/Models/auto"
 
     X_train, X_dev,  = load_data("Assets/Data/Numpy", import_data=True)
 

@@ -1,0 +1,45 @@
+
+
+# What i did
+
+- Created a requirements.txt file
+    ```
+    pipreqs .
+    ```
+    - Note were are using `tensorflow-macos==2.10.0`
+    
+- installed `pyenv` using homebrew
+    ```bash
+    brew install pyenv
+    ```
+- Installed vesrion 3.10.13
+    ```bash
+    pyenv install 3.10.13
+    ```
+    
+- Create virtual envireonment with specific python version:
+    ```bash
+    python3.10 -m venv env
+    ```
+- Activate it
+    ```bash
+    source env/bin/activate
+    ```
+- Install from reqiurements.txt
+    ```bash
+    pip install -r requirements.txt
+    ```
+    
+    
+- THEY CHANGED EVERYTHING HERE IS HOW TO DO MODELS NOW - CHANGE YOUR CODE:
+    - Simply changed path extension from `auto.keras` to `auto`
+    - Then retrain model and save with `auto_encoder.save(auto_path, save_format="keras")`
+    - Then Load mode with `auto_encoder.save(auto_path, save_format="keras")`
+
+    
+    
+- Shows how playing with latent space changes the output
+- Leverages tensor flow
+
+
+/opt/local/bin/python3.10 -m venv env
