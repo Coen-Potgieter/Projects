@@ -70,8 +70,8 @@ def learn(X_train, X_dev, auto_path, init=True):
 
     auto_encoder.fit(
         x=X_train, y=X_train[:, start_h:end_h, start_w:end_w, :],
-        batch_size=8,
-        epochs=5,
+        batch_size=4,
+        epochs=3,
         validation_data=(X_dev, X_dev[:, start_h:end_h, start_w:end_w, :]),
     )
 
@@ -285,20 +285,51 @@ def draw_faces(path):
 
 def main():
 
-    auto_path = "Assets/Models/auto"
+    # auto_path = "Assets/Models/auto-small-data"
+    # auto_path = "Assets/Models/auto-small-data2.2"
+    auto_path = "Assets/Models/auto-small-selected-data"
     X_train, X_dev = load_arrays("Assets/Data/Numpy")
 
+    target_indices = [1, 8, 4, 3, 13, 17, 19, 20, 24, 28, 29, 33, 34, 37, 40, 41, 44, 45, 47, 48, 49, 55, 
+        58, 59, 61, 64, 67, 70, 72, 75, 77, 79, 83, 84, 85, 86, 91, 96, 97, 100, 101, 102, 103, 
+        106, 109, 110, 112, 116, 120, 122, 123, 124, 126, 127, 128, 130, 132, 134, 136, 137, 138, 
+        141, 144, 145, 147, 148, 149, 152, 155, 156, 157, 158, 163, 165, 167, 169, 170, 171, 172, 
+        174, 177, 178, 181, 182, 184, 185, 188, 189, 190, 191, 192, 193, 194, 195, 198, 200, 201, 
+        205, 207, 208, 211, 213, 214, 218, 219, 220, 221, 223, 227, 228, 229, 231, 234, 235, 237, 
+        239, 240, 245, 246, 248, 250, 252, 253, 254, 256, 257, 259, 260, 261, 262, 263, 266, 268, 
+        269, 270, 271, 273, 278, 279, 281, 282, 283, 285, 286, 290, 291, 292, 293, 294, 295, 297, 
+        303, 305, 306, 307, 310, 312, 313, 315, 319, 320, 321, 323, 324, 325, 326, 327, 328, 329, 
+        331, 332, 333, 338, 341, 342, 343, 344, 347, 348, 350, 353, 357, 360, 361, 362, 363, 365, 
+        367, 368, 370, 375, 377, 379, 381, 382, 383, 384, 385, 386, 387, 390, 391, 392, 393, 394, 
+        396, 398, 401, 403, 404, 406, 407, 410, 411, 412, 413, 415, 417, 419, 420, 422, 426, 427, 
+        429, 431, 434, 435, 439, 440, 442, 444, 446, 449, 451, 452, 453, 454, 456, 458, 459, 462, 
+        463, 467, 468, 471, 472, 473, 474, 479, 481, 482, 490, 494, 495, 496, 499, 502, 504, 505, 
+        509, 510, 519, 521, 522, 523, 524, 525, 527, 529, 530, 532, 533, 537, 538, 541, 542, 546, 
+        547, 549, 550, 551, 552, 555, 558, 560]
 
-    # plot_imgs((X_train[:100],), ("faces",))
 
-    # learn(X_train[15_000:, :, :, :], X_dev[3000:4000, :, :, :], auto_path, init=True)
-    learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
+    
+    
+    X_specific = X_train[target_indices]
+
+
+    # i = 16*34;
+    # print(i)
+    # plot_imgs((X_train[i:i+16],), ("faces",))
+
+    # learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=True)
+    learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=False)
+    # learn(X_train[:500, :, :, :], X_dev[3000:3100, :, :, :], auto_path, init=False)
+    # learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
+    # learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
 
     # test_auto(auto_path, X_dev[50:75])
 
     # latent_space_inference(auto_path, X_dev, num_plots=25)
 
-    generate_faces(auto_path, X_dev[:500])
+    # generate_faces(auto_path, X_dev[:500])
+    # generate_faces(auto_path, X_train[:500])
+    generate_faces(auto_path, X_specific)
 
     # draw_faces(auto_path)
 

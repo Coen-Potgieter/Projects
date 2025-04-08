@@ -191,7 +191,11 @@ def new_face(model, latent_vectors, display, sliders):
     Returns:
     - inp (2D array): input for the deocder on next update (examples, node_acts)
     """
-    r = np.random.randint(0, 500)
+    # r = np.random.randint(0, 500)
+    r = np.random.randint(0, latent_vectors.shape[0])
+
+
+    print(r)
 
     inp = latent_vectors[r:r+1, :]
     outp = model.predict(inp, verbose=0)
@@ -253,25 +257,32 @@ def run(model, latent_vectors):
     clock = py.time.Clock()
 
     # ------------------- Appearance Variables ------------------- #
-    # Background colour
-    bg = (25, 25, 25)
-
-    # Latent vector text (pop-up)
-    val_font = py.font.SysFont("sfcamera", 17, bold=True)
-    value_text_col = (0, 0, 0)
-    value_bg_rgba = (136, 179, 200, 200)
+    GREEN1 = (225, 238, 188)
+    GREEN2 = (144, 198, 124)
+    GREEN3 = (103, 174, 110)
+    GREEN4 = (50, 142, 110)
+    GREEN5 = (31, 125, 83, 0)
 
     # Sliders (the `slider` is the block that the runs along the `line`)
     line_dims = (80, 4)    # (length, thickness)
     slider_radius = 8  # (length, thickness)
-    slider_col = (136, 179, 200)
-    line_col = (255, 252, 239)
 
+    # Latent vector text (pop-up)
+    val_font = py.font.SysFont("sfcamera", 17, bold=True)
+    
     # Instruction text
     instr_font = py.font.SysFont("Arial", 18, bold=True)
-    instr_text_col = (255, 127, 91)
     instr_pos = (0, 0)
     instr_text = "Generate Face: [SPACE]"
+
+    # Colours
+    bg = (25, 25, 25)
+    value_text_col = GREEN5
+    value_bg_rgba = [GREEN1[i] if i < 3 else 200 for i in range(4)]
+    slider_col = GREEN1
+    line_col = (255,255,255)
+    instr_text_col = GREEN1
+
 
     text_info = (instr_text, instr_pos, instr_text_col, instr_font)
     # ------------------- Init Latent vectors ------------------- #
