@@ -283,13 +283,20 @@ def draw_faces(path):
     pass
 
 
+def print_faces(X, idx_start, idx_end):
+    plot_imgs((X[idx_start:idx_end],), ("faces",))
+
 def main():
 
-    # auto_path = "Assets/Models/auto-small-data"
-    # auto_path = "Assets/Models/auto-small-data2.2"
-    auto_path = "Assets/Models/auto-small-selected-data"
-    X_train, X_dev = load_arrays("Assets/Data/Numpy")
+    # auto_path = "assets/models/auto-small-data"
+    # auto_path = "assets/models/auto-small-data2.1"
+    # auto_path = "assets/models/auto-small-selected-data"
 
+    auto_path = "assets/models/auto-small-data2.2" # For Playing With Sliders
+    # auto_path = "assets/models/auto2" # For Drawing Faces
+    X_train, X_dev = load_arrays("assets/data/numpy")
+
+    # Hand picked faces to train on
     target_indices = [1, 8, 4, 3, 13, 17, 19, 20, 24, 28, 29, 33, 34, 37, 40, 41, 44, 45, 47, 48, 49, 55, 
         58, 59, 61, 64, 67, 70, 72, 75, 77, 79, 83, 84, 85, 86, 91, 96, 97, 100, 101, 102, 103, 
         106, 109, 110, 112, 116, 120, 122, 123, 124, 126, 127, 128, 130, 132, 134, 136, 137, 138, 
@@ -308,29 +315,30 @@ def main():
         547, 549, 550, 551, 552, 555, 558, 560]
 
 
-    
-    
+    # print_faces(X_train, 0, 16)
+    # return
+
     X_specific = X_train[target_indices]
 
-
-    # i = 16*34;
-    # print(i)
-    # plot_imgs((X_train[i:i+16],), ("faces",))
-
+    # Different Training Runs
     # learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=True)
-    learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=False)
+    # learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=False)
     # learn(X_train[:500, :, :, :], X_dev[3000:3100, :, :, :], auto_path, init=False)
     # learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
     # learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
 
+    # Test Model
     # test_auto(auto_path, X_dev[50:75])
 
+    # Some Inference On Latent Variables
     # latent_space_inference(auto_path, X_dev, num_plots=25)
 
+    # Generate faces with different input data
     # generate_faces(auto_path, X_dev[:500])
     # generate_faces(auto_path, X_train[:500])
     generate_faces(auto_path, X_specific)
 
+    # Draw Faces
     # draw_faces(auto_path)
 
 

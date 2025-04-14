@@ -193,9 +193,7 @@ def new_face(model, latent_vectors, display, sliders):
     """
     # r = np.random.randint(0, 500)
     r = np.random.randint(0, latent_vectors.shape[0])
-
-
-    print(r)
+    print("Showing Face:", r)
 
     inp = latent_vectors[r:r+1, :]
     outp = model.predict(inp, verbose=0)
@@ -375,7 +373,6 @@ def run(model, latent_vectors):
         # only updates on mouse release
         elif (not mouse1) and (prev_mouse1):
             slide_lock = False
-
             draw_screen(win, bg, display, sliders, text_info)
             py.display.update()
 
