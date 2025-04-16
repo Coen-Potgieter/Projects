@@ -288,15 +288,19 @@ def print_faces(X, idx_start, idx_end):
 
 def main():
 
+    # ---------------- Bad Models ---------------- #
     # auto_path = "assets/models/auto-small-data"
     # auto_path = "assets/models/auto-small-data2.1"
     # auto_path = "assets/models/auto-small-selected-data"
 
+    # ---------------- Good Models ---------------- #
     auto_path = "assets/models/auto-small-data2.2" # For Playing With Sliders
     # auto_path = "assets/models/auto2" # For Drawing Faces
+
+    # ---------------- Import Data ---------------- #
     X_train, X_dev = load_arrays("assets/data/numpy")
 
-    # Hand picked faces to train on
+    # ------- Hand Picked Faces To Train On ---------------- #
     target_indices = [1, 8, 4, 3, 13, 17, 19, 20, 24, 28, 29, 33, 34, 37, 40, 41, 44, 45, 47, 48, 49, 55, 
         58, 59, 61, 64, 67, 70, 72, 75, 77, 79, 83, 84, 85, 86, 91, 96, 97, 100, 101, 102, 103, 
         106, 109, 110, 112, 116, 120, 122, 123, 124, 126, 127, 128, 130, 132, 134, 136, 137, 138, 
@@ -313,32 +317,35 @@ def main():
         463, 467, 468, 471, 472, 473, 474, 479, 481, 482, 490, 494, 495, 496, 499, 502, 504, 505, 
         509, 510, 519, 521, 522, 523, 524, 525, 527, 529, 530, 532, 533, 537, 538, 541, 542, 546, 
         547, 549, 550, 551, 552, 555, 558, 560]
-
-
-    # print_faces(X_train, 0, 16)
-    # return
-
     X_specific = X_train[target_indices]
 
-    # Different Training Runs
+    # ---------------- Visualise Data ---------------- #
+    # print_faces(X_train, idx_start=0, idx_end=16)
+    # return
+
+
+    # ---------------- Training Sequences ---------------- #
     # learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=True)
     # learn(X_specific, X_dev[3000:3100, :, :, :], auto_path, init=False)
     # learn(X_train[:500, :, :, :], X_dev[3000:3100, :, :, :], auto_path, init=False)
     # learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
     # learn(X_train, X_dev[3000:4000, :, :, :], auto_path, init=True)
 
-    # Test Model
+
+    # ---------------- Visualise Model Results ---------------- #
     # test_auto(auto_path, X_dev[50:75])
 
-    # Some Inference On Latent Variables
+    # ---------------- Latent Variable Inference ---------------- #
     # latent_space_inference(auto_path, X_dev, num_plots=25)
 
+    # ---------------- Generate Faces w/ Model ---------------- #
+    # latent_space_inference(auto_path, X_dev, num_plots=25)
     # Generate faces with different input data
     # generate_faces(auto_path, X_dev[:500])
     # generate_faces(auto_path, X_train[:500])
     generate_faces(auto_path, X_specific)
 
-    # Draw Faces
+    # ---------------- Generate Faces w/ Drawing ---------------- #
     # draw_faces(auto_path)
 
 
