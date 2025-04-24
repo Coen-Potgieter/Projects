@@ -59,7 +59,6 @@ def find_mean(centers, dist_indicies, pts):
 
 
 def main():
-
     def figure_config():
         fig = plt.figure()
         fig.set_size_inches(w=12, h=6)
@@ -118,7 +117,7 @@ def main():
 
     # cluster settings
     num_points = 500
-    num_k = 10
+    num_k = 3
     ms_delay = 500
 
     # graph settings

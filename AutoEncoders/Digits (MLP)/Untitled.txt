@@ -21,6 +21,7 @@
     ```bash
     python3.10 -m venv env
     ```
+
 - Activate it
     ```bash
     source env/bin/activate
@@ -34,7 +35,7 @@
 - THEY CHANGED EVERYTHING HERE IS HOW TO DO MODELS NOW - CHANGE YOUR CODE:
     - Simply changed path extension from `auto.keras` to `auto`
     - Then retrain model and save with `auto_encoder.save(auto_path, save_format="keras")`
-    - Then Load mode with `auto_encoder.save(auto_path, save_format="keras")`
+    - Then Load mode with `tf.keras.models.load_model(path, compile=False)`
 
     
     

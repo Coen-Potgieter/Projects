@@ -1,7 +1,6 @@
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 import numpy as np
-import sys
 
 def dist(pt1, pt2):
     return np.sqrt((pt1[0] - pt2[0])**2 + (pt1[1] - pt2[1])**2)
@@ -48,7 +47,7 @@ def main():
                         c=cols[cluster_idx])
             
     num_points = 300
-    num_k = 5
+    num_k = 10
     ms_delay = 500
 
     cols = [np.random.uniform(low=0, high=1, size=(1,3)) for _ in range(num_k)]

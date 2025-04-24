@@ -2,7 +2,6 @@
 from PIL import Image
 import numpy as np
 import time
-import sys
 
 
 def euclid_dist(centers, pts):
@@ -87,7 +86,7 @@ def build_new_pic(pic, centers):
 
 def main():
 
-    num_k = 2
+    num_k = 3
     num_iters = 10
     dims = 3
 
